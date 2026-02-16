@@ -178,7 +178,7 @@ void eep_read_memory(uint8_t nmem)   //read the nmem memory data
         {
           PRT(" chksum NOK ");
           memory_band[nmem].vars[HMI_S_BPF] = 0xff;  //signal empty to load default values
-          fft_gain[nmem] = 16u; //default
+          //fft_gain[nmem] = 16u; //default
         }
       }
       else
@@ -244,8 +244,10 @@ void eep_write_memory(uint8_t nmem)   //read the nmem memory data
 // Eeprom_Read_Band - read a memory setup band from eeprom
 //
 //***********************************************************************
-void Eeprom_Read_Band(uint8_t mem)
+bool Eeprom_Read_Band(uint8_t mem)
 {
+  bool ret;
+
   //read the actual mem from eeprom to get the actual value
   PRT(" read mem "); PRT(mem);  
   eep_read_memory(mem);
@@ -260,11 +262,15 @@ void Eeprom_Read_Band(uint8_t mem)
     memory_band[mem].vars[4] = 0;
     memory_band[mem].vars[5] = 2;
     memory_band[mem].mem_freq.u32 = band2_hmi_freq_default;
+    fft_gain[mem] = 16u; //default
+    ret = false;
   }
   else
   {
     PRT_LN(" ok  ");
+    ret = true;
   }
+  return(ret);
 }
 
 
@@ -291,7 +297,7 @@ void Eeprom_Save_Band(uint8_t actual_mem, uint8_t save_mem)
     }  
 
     //recall the data for the actual mem from eeprom
-    Eeprom_Read_Band(actual_mem);  //it is in two steps: writes the address and reads the content
+    (void)Eeprom_Read_Band(actual_mem);  //it is in two steps: writes the address and reads the content
     delayMicroseconds(1000);  //time for Arduino Pro Mini to process
   }
 
@@ -307,14 +313,21 @@ void Eeprom_Save_Band(uint8_t actual_mem, uint8_t save_mem)
 //***********************************************************************
 void Eeprom_setup(void)
 {
+  uint8_t num_mem_ok = 0;
+
   PRT_LN("Eeprom_setup");
   //read memories band data from arduino pro mini eeprom I2C
   PRT_LN("Eeprom read memory ");
   for(uint8_t m=0; m<HMI_NUM_OPT_MEMORY; m++)
   {
-    Eeprom_Read_Band(m);  //it is in two steps: writes the address and reads the content
+    if(Eeprom_Read_Band(m) == true)  //it is in two steps: writes the address and reads the content
+    {
+      num_mem_ok++;
+    }
     delayMicroseconds(1000);  //time for Arduino Pro Mini to process
   }
+  //Serialx.print("Eeprom memories: "); 
+  //Serialx.println(num_mem_ok); 
   PRT_LN("FIM");
 
 }

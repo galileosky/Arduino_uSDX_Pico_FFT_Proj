@@ -55,9 +55,10 @@ void mon_init()
 	Serialx.print("  HF Transceiver   \n");
 	Serialx.print("======= by ========\n");
 	Serialx.print(" Arjan te Marvelde \n");
-	Serialx.print("Klaus Fensterseifer\n");
-	Serialx.print("=======2023========\n");
-	Serialx.print("Pico> ");								// prompt
+	Serialx.print("Klaus Fensterseifer\n====");
+	//Serialx.print("====Fev16 2026=====\n");
+	Serialx.print(SW_VERSION);
+	Serialx.print("=====\nPico> ");								// prompt
 }
 
 

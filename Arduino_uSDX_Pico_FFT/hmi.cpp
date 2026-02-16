@@ -1191,6 +1191,7 @@ void hmi_refresh(void)   //hmi loop
   //hmi_menu_old = 0xff;
   hmi_menu_opt_display_old = 0xff;
   fft_gain_old = 0;
+  Smeter_bargraph(0);  //clear bargraph
 }
 
 

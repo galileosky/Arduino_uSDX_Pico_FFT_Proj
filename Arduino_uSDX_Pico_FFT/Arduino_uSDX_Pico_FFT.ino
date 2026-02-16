@@ -177,8 +177,6 @@ void setup() {
   //special jobs while waiting initial display print
   //Serialx.println("setup0");
   uSDR_setup0();  //write something into display while waiting for the serial and eepromread
-  //Serialx.println("hmi_init0");
-  hmi_init0();     //read data from Eeprom must be called after Wire1.begin() 
   //Serialx.println("5s");
 
 
@@ -202,7 +200,10 @@ void setup() {
   Serialx.println("Arduino uSDX Pico FFT");
   Serialx.println("Serial took " + String((millis() - tim)) + "ms to start");
 */
-
+  //Serialx.println("hmi_init0");
+  //hmi_init0();    //read data from Eeprom must be called after Wire1.begin() 
+                  //and after Pro Mini finish its setup switching relays
+  
   uSDR_setup();
 }
 
